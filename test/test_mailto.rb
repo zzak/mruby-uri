@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri/mailto'
-
-module URI
-
-
-class TestMailTo < Test::Unit::TestCase
+class TestMailTo < MTest::Unit::TestCase
   def setup
     @u = URI::MailTo
   end
@@ -118,5 +112,4 @@ class TestMailTo < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

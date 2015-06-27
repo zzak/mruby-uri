@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri'
-
-module URI
-
-
-class TestGeneric < Test::Unit::TestCase
+class TestGeneric < MTest::Unit::TestCase
   def setup
     @url = 'http://a/b/c/d;p?q'
     @base_url = URI.parse(@url)
@@ -711,5 +705,4 @@ class TestGeneric < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

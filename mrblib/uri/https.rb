@@ -6,8 +6,6 @@
 # Revision:: $Id$
 #
 
-require 'uri/http'
-
 module URI
 
   # The default port for HTTPS URIs is 443, and the scheme is 'https:' rather

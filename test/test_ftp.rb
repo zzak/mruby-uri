@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri/ftp'
-
-module URI
-
-
-class TestFTP < Test::Unit::TestCase
+class TestFTP < MTest::Unit::TestCase
   def setup
   end
 
@@ -58,5 +52,4 @@ class TestFTP < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

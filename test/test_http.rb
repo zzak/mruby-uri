@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri/http'
-
-module URI
-
-
-class TestHTTP < Test::Unit::TestCase
+class TestHTTP < MTest::Unit::TestCase
   def setup
   end
 
@@ -59,5 +53,4 @@ class TestHTTP < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

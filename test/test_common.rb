@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri'
-
-module URI
-
-
-class TestCommon < Test::Unit::TestCase
+class TestCommon < MTest::Unit::TestCase
   def setup
   end
 
@@ -51,5 +45,4 @@ class TestCommon < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

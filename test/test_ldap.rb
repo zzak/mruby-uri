@@ -1,10 +1,4 @@
-require 'test/unit'
-require 'uri/ldap'
-
-module URI
-
-
-class TestLDAP < Test::Unit::TestCase
+class TestLDAP < MTest::Unit::TestCase
   def setup
   end
 
@@ -96,5 +90,4 @@ class TestLDAP < Test::Unit::TestCase
   end
 end
 
-
-end
+MTest::Unit.new.run

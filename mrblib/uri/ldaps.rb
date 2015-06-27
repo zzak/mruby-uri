@@ -1,5 +1,3 @@
-require 'uri/ldap'
-
 module URI
 
   # The default port for LDAPS URIs is 636, and the scheme is 'ldaps:' rather

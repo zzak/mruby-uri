@@ -6,8 +6,6 @@
 # Revision:: $Id$
 #
 
-require 'uri/common'
-
 module URI
   
   #
