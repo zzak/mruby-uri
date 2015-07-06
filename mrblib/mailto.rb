@@ -157,7 +157,7 @@ module URI
       return true unless v
       return true if v.size == 0
 
-      if OPAQUE !~ v || /\A#{MAILBOX_PATTERN}*\z/o !~ v
+      if OPAQUE !~ v || /\A#{MAILBOX_PATTERN}*\z/ !~ v
         raise InvalidComponentError,
           "bad component(expected opaque component): #{v}"
       end
@@ -182,7 +182,7 @@ module URI
       return true if v.size == 0
 
       if OPAQUE !~ v || 
-          /\A(#{HEADER_PATTERN}(?:\&#{HEADER_PATTERN})*)\z/o !~ v
+          /\A(#{HEADER_PATTERN}(?:\&#{HEADER_PATTERN})*)\z/ !~ v
         raise InvalidComponentError,
           "bad component(expected opaque component): #{v}"
       end
@@ -195,7 +195,7 @@ module URI
       @headers = []
       if v
         v.scan(HEADER_REGEXP) do |x|
-          @headers << x.split(/=/o, 2)
+          @headers << x.split(/=/, 2)
         end
       end
     end

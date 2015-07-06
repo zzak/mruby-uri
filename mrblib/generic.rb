@@ -349,7 +349,7 @@ module URI
     private :split_userinfo
 
     def escape_userpass(v)
-      v = URI.escape(v, /[@:\/]/o) # RFC 1738 section 3.1 #/
+      v = URI.escape(v, /[@:\/]/) # RFC 1738 section 3.1 #/
     end
     private :escape_userpass
 
