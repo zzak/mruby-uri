@@ -621,9 +621,12 @@ module URI
 
       # RFC2396, Section 5.2, 6), a)
       base_path << '' if base_path.last == '..'
-      while i = base_path.index('..')
-        base_path.slice!(i - 1, 2)
+      bp = base_path.dup
+
+      while i = bp.index('..')
+        bp = base_path.slice(i - 1, 2)
       end
+      base_path = bp
 
       if (first = rel_path.first) and first.empty?
         base_path.clear
