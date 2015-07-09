@@ -605,7 +605,7 @@ module URI
     unless schemes
       ABS_URI_REF
     else
-      /(?=#{Regexp.union(*schemes)}:)#{PATTERN::X_ABS_URI}/x
+      /(?=#{schemes.first}:)#{PATTERN::X_ABS_URI}/x
     end
   end
 
