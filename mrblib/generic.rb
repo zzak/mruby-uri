@@ -725,8 +725,8 @@ module URI
     def merge(oth)
       begin
         base, rel = merge0(oth)
-      rescue
-        raise $!.class, $!.message
+      rescue Exception => e
+        raise e.class, e.message
       end
 
       if base == rel
