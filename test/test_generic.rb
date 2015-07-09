@@ -26,27 +26,27 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal(exp, ary)
 
     # 1
-    url = URI.parse('ftp://ftp.is.co.za/rfc/rfc1808.txt')
-    assert_kind_of(URI::FTP, url)
+    #url = URI.parse('ftp://ftp.is.co.za/rfc/rfc1808.txt')
+    #assert_kind_of(URI::FTP, url)
 
-    exp = [
-      'ftp', 
-      nil, 'ftp.is.co.za', URI::FTP.default_port, 
-      'rfc/rfc1808.txt', nil,
-    ]
-    ary = uri_to_ary(url)
-    assert_equal(exp, ary)
-    # 1'
-    url = URI.parse('ftp://ftp.is.co.za/%2Frfc/rfc1808.txt')
-    assert_kind_of(URI::FTP, url)
+    #exp = [
+    #  'ftp', 
+    #  nil, 'ftp.is.co.za', URI::FTP.default_port, 
+    #  'rfc/rfc1808.txt', nil,
+    #]
+    #ary = uri_to_ary(url)
+    #assert_equal(exp, ary)
+    ## 1'
+    #url = URI.parse('ftp://ftp.is.co.za/%2Frfc/rfc1808.txt')
+    #assert_kind_of(URI::FTP, url)
 
-    exp = [
-      'ftp', 
-      nil, 'ftp.is.co.za', URI::FTP.default_port, 
-      '/rfc/rfc1808.txt', nil,
-    ]
-    ary = uri_to_ary(url)
-    assert_equal(exp, ary)
+    #exp = [
+    #  'ftp', 
+    #  nil, 'ftp.is.co.za', URI::FTP.default_port, 
+    #  '/rfc/rfc1808.txt', nil,
+    #]
+    #ary = uri_to_ary(url)
+    #assert_equal(exp, ary)
 
     # 2
     url = URI.parse('gopher://spinaltap.micro.umn.edu/00/Weather/California/Los%20Angeles')
@@ -77,16 +77,16 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal(exp, ary)
 
     # 4
-    url = URI.parse('mailto:mduerst@ifi.unizh.ch')
-    assert_kind_of(URI::Generic, url)
+    #url = URI.parse('mailto:mduerst@ifi.unizh.ch')
+    #assert_kind_of(URI::Generic, url)
 
-    exp = [
-      'mailto', 
-      'mduerst@ifi.unizh.ch',
-      []
-    ]
-    ary = uri_to_ary(url)
-    assert_equal(exp, ary)
+    #exp = [
+    #  'mailto', 
+    #  'mduerst@ifi.unizh.ch',
+    #  []
+    #]
+    #ary = uri_to_ary(url)
+    #assert_equal(exp, ary)
 
     # 5
     url = URI.parse('news:comp.infosystems.www.servers.unix')
