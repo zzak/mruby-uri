@@ -13,7 +13,8 @@
 
 module URI
   # :stopdoc:
-  VERSION_CODE = '000911'
-  VERSION = VERSION_CODE.scan(/../).collect{|n| n.to_i}.join('.')
+  #VERSION_CODE = '000911'
+  #VERSION = VERSION_CODE.scan(/../).collect{|n| n.to_i}.join('.')
+  VERSION = "1.0.0"
   # :startdoc:
 end
