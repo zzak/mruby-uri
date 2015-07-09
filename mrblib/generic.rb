@@ -1098,10 +1098,10 @@ module URI
       end
     end
 
-    @@to_s = Kernel.instance_method(:to_s)
-    def inspect
-      @@to_s.bind(self).call.sub!(/>\z/) {" URL:#{self}>"}
-    end
+    #@@to_s = Kernel.instance_method(:to_s)
+    #def inspect
+    #  @@to_s.bind(self).call.sub!(/>\z/) {" URL:#{self}>"}
+    #end
 
     def coerce(oth)
       case oth
