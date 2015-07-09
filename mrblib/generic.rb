@@ -35,7 +35,7 @@ module URI
       :path, :opaque, 
       :query, 
       :fragment
-    ].freeze
+    ]
 
     #
     # Components of the URI in the order.
@@ -194,7 +194,6 @@ module URI
           "the scheme #{@scheme} does not accept registry part: #{@registry} (or bad hostname?)"
       end
       
-      @scheme.freeze if @scheme
       self.set_path('') if !@path && !@opaque # (see RFC2396 Section 5.2)
       self.set_port(self.default_port) if self.default_port && !@port
     end

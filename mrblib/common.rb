@@ -185,32 +185,29 @@ module URI
     # :stopdoc:
 
     # for URI::split
-    ABS_URI = Regexp.new('^' + PATTERN::X_ABS_URI + '$', #'
-                         Regexp::EXTENDED, 'N').freeze
-    REL_URI = Regexp.new('^' + PATTERN::X_REL_URI + '$', #'
-                         Regexp::EXTENDED, 'N').freeze
+    ABS_URI = Regexp.new('^' + PATTERN::X_ABS_URI + '$', Regexp::EXTENDED)
+    REL_URI = Regexp.new('^' + PATTERN::X_REL_URI + '$', Regexp::EXTENDED)
 
     # for URI::extract
-    URI_REF     = Regexp.new(PATTERN::URI_REF, false, 'N').freeze
-    ABS_URI_REF = Regexp.new(PATTERN::X_ABS_URI, Regexp::EXTENDED, 'N').freeze
-    REL_URI_REF = Regexp.new(PATTERN::X_REL_URI, Regexp::EXTENDED, 'N').freeze
+    URI_REF     = Regexp.new(PATTERN::URI_REF)
+    ABS_URI_REF = Regexp.new(PATTERN::X_ABS_URI, Regexp::EXTENDED)
+    REL_URI_REF = Regexp.new(PATTERN::X_REL_URI, Regexp::EXTENDED)
 
     # for URI::escape/unescape
-    ESCAPED = Regexp.new(PATTERN::ESCAPED, false, 'N').freeze
-    UNSAFE  = Regexp.new("[^#{PATTERN::UNRESERVED}#{PATTERN::RESERVED}]",
-                         false, 'N').freeze
+    ESCAPED = Regexp.new(PATTERN::ESCAPED)
+    UNSAFE  = Regexp.new("[^#{PATTERN::UNRESERVED}#{PATTERN::RESERVED}]")
 
     # for Generic#initialize
-    SCHEME   = Regexp.new("^#{PATTERN::SCHEME}$", false, 'N').freeze #"
-    USERINFO = Regexp.new("^#{PATTERN::USERINFO}$", false, 'N').freeze #"
-    HOST     = Regexp.new("^#{PATTERN::HOST}$", false, 'N').freeze #"
-    PORT     = Regexp.new("^#{PATTERN::PORT}$", false, 'N').freeze #"
-    OPAQUE   = Regexp.new("^#{PATTERN::OPAQUE_PART}$", false, 'N').freeze #"
-    REGISTRY = Regexp.new("^#{PATTERN::REG_NAME}$", false, 'N').freeze #"
-    ABS_PATH = Regexp.new("^#{PATTERN::ABS_PATH}$", false, 'N').freeze #"
-    REL_PATH = Regexp.new("^#{PATTERN::REL_PATH}$", false, 'N').freeze #"
-    QUERY    = Regexp.new("^#{PATTERN::QUERY}$", false, 'N').freeze #"
-    FRAGMENT = Regexp.new("^#{PATTERN::FRAGMENT}$", false, 'N').freeze #"
+    SCHEME   = Regexp.new("^#{PATTERN::SCHEME}$")
+    USERINFO = Regexp.new("^#{PATTERN::USERINFO}$")
+    HOST     = Regexp.new("^#{PATTERN::HOST}$")
+    PORT     = Regexp.new("^#{PATTERN::PORT}$")
+    OPAQUE   = Regexp.new("^#{PATTERN::OPAQUE_PART}$")
+    REGISTRY = Regexp.new("^#{PATTERN::REG_NAME}$")
+    ABS_PATH = Regexp.new("^#{PATTERN::ABS_PATH}$")
+    REL_PATH = Regexp.new("^#{PATTERN::REL_PATH}$")
+    QUERY    = Regexp.new("^#{PATTERN::QUERY}$")
+    FRAGMENT = Regexp.new("^#{PATTERN::FRAGMENT}$")
     # :startdoc:
   end # REGEXP
 
