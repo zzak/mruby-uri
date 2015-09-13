@@ -634,11 +634,8 @@ module URI
           TBLENCWWWCOMP_[i.chr] = '%%%X' % i
         end
       end
-      TBLENCWWWCOMP_.freeze
     end
-    str = str.dup.force_encoding(Encoding::ASCII_8BIT)
-    str.gsub!(/[^*\-.0-9A-Z_a-z]/, TBLENCWWWCOMP_)
-    str
+    str.gsub(/[^*\-.0-9A-Z_a-z]/){ TBLENCWWWCOMP_[$&] }
   end
 
   # Decode given +str+ of URL-encoded form data.
@@ -660,9 +657,8 @@ module URI
           TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
         end
       end
-      TBLDECWWWCOMP_.freeze
     end
-    str.gsub(/\+|%\h\h/, TBLDECWWWCOMP_)
+    str.gsub(/\+|%\h\h/){ TBLDECWWWCOMP_[$&] }
   end
 
   # Generate URL-encoded form data from given +enum+.
@@ -683,15 +679,18 @@ module URI
   # See URI.encode_www_component(str)
   def self.encode_www_form(enum)
     str = nil
+    if enum.kind_of?(Array) && enum[0].kind_of?(Array)
+      enum = enum.to_h
+    end
     enum.each do |k,v|
       if str
         str << '&'
       else
-        str = ''.force_encoding(Encoding::US_ASCII)
+        str = ''
       end
-      str << encode_www_component(k)
+      str << encode_www_component(k.to_s)
       str << '='
-      str << encode_www_component(v)
+      str << encode_www_component(v.to_s)
     end
     str
   end
