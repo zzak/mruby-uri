@@ -635,7 +635,14 @@ module URI
         end
       end
     end
-    str.gsub(/[^*\-.0-9A-Z_a-z]/){ TBLENCWWWCOMP_[$&] }
+    str.gsub(/[^*\-.0-9A-Z_a-z]/){
+      key = $&
+      if TBLENCWWWCOMP_[key]
+        TBLENCWWWCOMP_[key]
+      else
+        key.unpack("C*").collect{|i| "%%%X" % i }.join("")
+      end
+    }
   end
 
   # Decode given +str+ of URL-encoded form data.
