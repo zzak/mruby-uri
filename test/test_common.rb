@@ -61,10 +61,10 @@ class TestCommon < MTest::Unit::TestCase
     assert_equal("a=1", URI.encode_www_form([["a", "1"]]))
     assert_equal("a=1", URI.encode_www_form([[:a, 1]]))
     expected = "a=1&%E3%81%82=%E6%BC%A2"
-    assert_equal(expected, URI.encode_www_form("a" => "1", "\u3042" => "\u6F22"))
-    assert_equal(expected, URI.encode_www_form(a: 1, :"\u3042" => "\u6F22"))
-    assert_equal(expected, URI.encode_www_form([["a", "1"], ["\u3042", "\u6F22"]]))
-    assert_equal(expected, URI.encode_www_form([[:a, 1], [:"\u3042", "\u6F22"]]))
+    assert_equal(expected, URI.encode_www_form("a" => "1", 'あ' => '漢'))
+    assert_equal(expected, URI.encode_www_form(a: 1, :'あ' => '漢'))
+    assert_equal(expected, URI.encode_www_form([["a", "1"], ['あ', '漢']]))
+    assert_equal(expected, URI.encode_www_form([[:a, 1], [:'あ', '漢']]))
   end
 end
 

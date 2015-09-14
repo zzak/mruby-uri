@@ -8,5 +8,6 @@ MRuby::Gem::Specification.new('mruby-uri') do |spec|
   spec.add_dependency 'mruby-array-ext', core: 'mruby-array-ext'
   spec.add_dependency 'mruby-onig-regexp', mgem: 'mruby-onig-regexp'
   spec.add_dependency 'mruby-io', mgem: 'mruby-io'
+  spec.add_dependency 'mruby-pack', mgem: 'mruby-pack'
   spec.add_dependency 'mruby-mtest', mgem: 'mruby-mtest'
 end
