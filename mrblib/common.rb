@@ -325,6 +325,10 @@ module URI
   extend Escape
 
   @@schemes = {}
+  # Returns a Hash of the defined schemes
+  def self.scheme_list
+    @@schemes
+  end
   
   #
   # Base class for all URI exceptions.

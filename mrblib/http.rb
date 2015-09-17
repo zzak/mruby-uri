@@ -86,6 +86,7 @@ module URI
     #
     def request_uri
       r = path_query
+      return nil unless r
       if r[0] != ?/
         r = '/' + r
       end
