@@ -635,7 +635,7 @@ module URI
           TBLENCWWWCOMP_[' '] = '+'
         when 0x2A, 0x2D, 0x2E, 0x30..0x39, 0x41..0x5A, 0x5F, 0x61..0x7A
         else
-          TBLENCWWWCOMP_[i.chr] = '%%%X' % i
+          TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
         end
       end
     end
@@ -644,7 +644,7 @@ module URI
       if TBLENCWWWCOMP_[key]
         TBLENCWWWCOMP_[key]
       else
-        key.unpack("C*").collect{|i| "%%%X" % i }.join("")
+        key.unpack("C*").collect{|i| "%%%02X" % i }.join("")
       end
     }
   end
