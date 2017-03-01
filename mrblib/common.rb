@@ -619,17 +619,13 @@ module URI
   # :nodoc:
   TBLDECWWWCOMP_ = {}
   256.times do |i|
-    case i
-    when 0x20
-      TBLDECWWWCOMP_['+'] = ' '
-    else
-      h, l = i>>4, i&15
-      TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
-      TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
-      TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
-      TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
-    end
+    h, l = i>>4, i&15
+    TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
+    TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
+    TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
+    TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
   end
+  TBLDECWWWCOMP_['+'] = ' '
 
   # Encode given +str+ to URL-encoded form data.
   #
