@@ -618,6 +618,18 @@ module URI
 
   # :nodoc:
   TBLDECWWWCOMP_ = {}
+  256.times do |i|
+    case i
+    when 0x20
+      TBLDECWWWCOMP_['+'] = ' '
+    else
+      h, l = i>>4, i&15
+      TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
+    end
+  end
 
   # Encode given +str+ to URL-encoded form data.
   #
@@ -655,20 +667,6 @@ module URI
   #
   # See URI.encode_www_component(str)
   def self.decode_www_component(str)
-    if TBLDECWWWCOMP_.empty?
-      256.times do |i|
-        case i
-        when 0x20
-          TBLDECWWWCOMP_['+'] = ' '
-        else
-          h, l = i>>4, i&15
-          TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
-          TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
-          TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
-          TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
-        end
-      end
-    end
     str.gsub(/\+|%\h\h/){ TBLDECWWWCOMP_[$&] }
   end
 
