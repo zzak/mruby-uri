@@ -70,6 +70,20 @@ class TestCommon < MTest::Unit::TestCase
     assert_equal(expected, URI.encode_www_form([["a", "1"], ['あ', '漢']]))
     assert_equal(expected, URI.encode_www_form([[:a, 1], [:'あ', '漢']]))
   end
+
+  def test_decode_www_form
+    assert_equal([["あ", "漢"]], URI.decode_www_form("%E3%81%82=%E6%BC%A2"))
+    assert_equal([%w[a 1], %w[a 2]], URI.decode_www_form("a=1&a=2"))
+    assert_equal([%w[a 1;a=2]], URI.decode_www_form("a=1;a=2"))
+    assert_equal([%w[a 1], ['', ''], %w[a 2]], URI.decode_www_form("a=1&&a=2"))
+    assert_equal([%w[?a 1], %w[a 2]], URI.decode_www_form("?a=1&a=2"))
+    assert_equal([], URI.decode_www_form(""))
+    assert_equal([%w[% 1]], URI.decode_www_form("%=1"))
+    assert_equal([%w[a %]], URI.decode_www_form("a=%"))
+    assert_equal([%w[a 1], %w[% 2]], URI.decode_www_form("a=1&%=2"))
+    assert_equal([%w[a 1], %w[b %]], URI.decode_www_form("a=1&b=%"))
+    assert_equal([['a', ''], ['b', '']], URI.decode_www_form("a&b"))
+  end
 end
 
 MTest::Unit.new.run

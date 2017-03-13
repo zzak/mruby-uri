@@ -685,6 +685,20 @@ module URI
     end
     str
   end
+
+  def self.decode_www_form(str, opts = {})
+    separator = opts[:separator] || '&'
+    ary = []
+    return ary if str.empty?
+    str.split(separator).map do |string|
+      key, val = string.split('=', 2)
+
+      [
+        key.nil? ? "" : decode_www_component(key),
+        val.nil? ? "" : decode_www_component(val),
+      ]
+    end
+  end
 end
 
 module Kernel
