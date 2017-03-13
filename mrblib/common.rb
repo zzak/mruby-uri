@@ -384,15 +384,8 @@ module URI
       # null uri
 
     when ABS_URI
-      scheme    = $~[1].empty? ? nil : $~[1]
-      opaque    = $~[2].empty? ? nil : $~[2]
-      userinfo  = $~[3].empty? ? nil : $~[3]
-      host      = $~[4].empty? ? nil : $~[4]
-      port      = $~[5].empty? ? nil : $~[5]
-      registry  = $~[6].empty? ? nil : $~[6]
-      path      = $~[7].empty? ? nil : $~[7]
-      query     = $~[8].empty? ? nil : $~[8]
-      fragment  = $~[-1].empty? ? nil : $~[-1]
+      scheme, opaque, userinfo, host, port,
+          registry, path, query, fragment = $~[1..-1]
 
       # URI-reference = [ absoluteURI | relativeURI ] [ "#" fragment ]
 
@@ -419,15 +412,8 @@ module URI
       scheme = nil
       opaque = nil
 
-      userinfo      = $~[1].empty? ? nil : $~[1]
-      host          = $~[2].empty? ? nil : $~[2]
-      port          = $~[3].empty? ? nil : $~[3]
-      registry      = $~[4].empty? ? nil : $~[4]
-      rel_segment   = $~[5].empty? ? nil : $~[5]
-      abs_path      = $~[6].empty? ? nil : $~[6]
-      query         = $~[7].empty? ? nil : $~[7]
-      fragment      = $~[-1].empty? ? nil : $~[-1]
-
+      userinfo, host, port, registry,
+        rel_segment, abs_path, query, fragment = $~[1..-1]
       if rel_segment && abs_path
         path = rel_segment + abs_path
       elsif rel_segment
