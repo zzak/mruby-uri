@@ -7,7 +7,7 @@
 #
 
 module URI
-  
+
   #
   # Base class for all URI classes.
   # Implements generic URI syntax as per RFC 2396.
@@ -30,10 +30,10 @@ module URI
     end
 
     COMPONENT = [
-      :scheme, 
-      :userinfo, :host, :port, :registry, 
-      :path, :opaque, 
-      :query, 
+      :scheme,
+      :userinfo, :host, :port, :registry,
+      :path, :opaque,
+      :query,
       :fragment
     ]
 
@@ -61,7 +61,7 @@ module URI
     # == Description
     #
     # At first, tries to create a new URI::Generic instance using
-    # URI::Generic::build. But, if exception URI::InvalidComponentError is raised, 
+    # URI::Generic::build. But, if exception URI::InvalidComponentError is raised,
     # then it URI::Escape.escape all URI components and tries again.
     #
     #
@@ -70,7 +70,7 @@ module URI
         return self.build(args)
       rescue InvalidComponentError
         if args.kind_of?(Array)
-          return self.build(args.collect{|x| 
+          return self.build(args.collect{|x|
             if x
               URI.escape(x)
             else
@@ -116,7 +116,7 @@ module URI
           end
         end
       else
-        raise ArgumentError, 
+        raise ArgumentError,
         "expected Array of or Hash of components of #{self.class} (#{self.class.component.join(', ')})"
       end
 
@@ -151,10 +151,10 @@ module URI
     #
     # Creates a new URI::Generic instance from ``generic'' components without check.
     #
-    def initialize(scheme, 
-                   userinfo, host, port, registry, 
-                   path, opaque, 
-                   query, 
+    def initialize(scheme,
+                   userinfo, host, port, registry,
+                   path, opaque,
+                   query,
                    fragment,
                    arg_check = false)
       @scheme = nil
@@ -190,10 +190,10 @@ module URI
         self.set_fragment(fragment)
       end
       if @registry && !self.class.use_registry
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "the scheme #{@scheme} does not accept registry part: #{@registry} (or bad hostname?)"
       end
-      
+
       self.set_path('') if !@path && !@opaque # (see RFC2396 Section 5.2)
       self.set_port(self.default_port) if self.default_port && !@port
     end
@@ -256,7 +256,7 @@ module URI
 
     def check_user(v)
       if @registry || @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set user with registry or opaque"
       end
 
@@ -273,7 +273,7 @@ module URI
 
     def check_password(v, user = @user)
       if @registry || @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set password with registry or opaque"
       end
       return v unless v
@@ -309,7 +309,7 @@ module URI
       set_user(user)
       # returns user
     end
-    
+
     def password=(password)
       check_password(password)
       set_password(password)
@@ -317,7 +317,7 @@ module URI
     end
 
     def set_userinfo(user, password = nil)
-      unless password 
+      unless password
         user, password = split_userinfo(user)
       end
       @user     = user
@@ -374,7 +374,7 @@ module URI
       return v unless v
 
       if @registry || @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set host with registry or opaque"
       elsif HOST !~ v
         raise InvalidComponentError,
@@ -400,7 +400,7 @@ module URI
       return v unless v
 
       if @registry || @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set port with registry or opaque"
       elsif !v.kind_of?(Fixnum) && PORT !~ v
         raise InvalidComponentError,
@@ -436,7 +436,7 @@ module URI
       # authority     = server | reg_name
       # server        = [ [ userinfo "@" ] hostport ]
       if @host || @port || @user # userinfo = @user + ':' + @password
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set registry with host, port, or userinfo"
       elsif v && REGISTRY !~ v
         raise InvalidComponentError,
@@ -463,18 +463,18 @@ module URI
       # absoluteURI   = scheme ":" ( hier_part | opaque_part )
       # hier_part     = ( net_path | abs_path ) [ "?" query ]
       if v && @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "path conflicts with opaque"
       end
 
       if @scheme
         if v && v != '' && ABS_PATH !~ v
-          raise InvalidComponentError, 
+          raise InvalidComponentError,
             "bad component(expected absolute path component): #{v}"
         end
       else
         if v && v != '' && ABS_PATH !~ v && REL_PATH !~ v
-          raise InvalidComponentError, 
+          raise InvalidComponentError,
             "bad component(expected relative path component): #{v}"
         end
       end
@@ -501,12 +501,12 @@ module URI
       # absoluteURI   = scheme ":" ( hier_part | opaque_part )
       # hier_part     = ( net_path | abs_path ) [ "?" query ]
       if @opaque
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "query conflicts with opaque"
       end
 
       if v && v != '' && QUERY !~ v
-          raise InvalidComponentError, 
+          raise InvalidComponentError,
             "bad component(expected query component): #{v}"
         end
 
@@ -532,7 +532,7 @@ module URI
       # absoluteURI   = scheme ":" ( hier_part | opaque_part )
       # hier_part     = ( net_path | abs_path ) [ "?" query ]
       if @host || @port || @user || @path  # userinfo = @user + ':' + @password
-        raise InvalidURIError, 
+        raise InvalidURIError,
           "can not set opaque with host, port, userinfo or path"
       elsif v && OPAQUE !~ v
         raise InvalidComponentError,
@@ -558,7 +558,7 @@ module URI
       return v unless v
 
       if v && v != '' && FRAGMENT !~ v
-        raise InvalidComponentError, 
+        raise InvalidComponentError,
           "bad component(expected fragment component): #{v}"
       end
 
@@ -779,12 +779,12 @@ module URI
       end
 
       if self.relative? && oth.relative?
-        raise BadURIError, 
+        raise BadURIError,
           "both URI are relative"
       end
 
       if self.absolute? && oth.absolute?
-        #raise BadURIError, 
+        #raise BadURIError,
         #  "both URI are absolute"
         # hmm... should return oth for usability?
         return oth, oth
@@ -846,11 +846,11 @@ module URI
       end
 
       if self.relative?
-        raise BadURIError, 
+        raise BadURIError,
           "relative URI: #{self}"
       end
       if oth.relative?
-        raise BadURIError, 
+        raise BadURIError,
           "relative URI: #{oth}"
       end
 
@@ -858,7 +858,7 @@ module URI
         return self, self.dup
       end
       rel = URI::Generic.new(nil, # it is relative URI
-                             self.userinfo, self.host, self.port, 
+                             self.userinfo, self.host, self.port,
                              self.registry, self.path, self.opaque,
                              self.query, self.fragment)
 
@@ -946,7 +946,7 @@ module URI
     #   uri = URI.parse('http://my.example.com')
     #   p uri.route_to('http://my.example.com/main.rbx?page=1')
     #   #=> #<URI::Generic:0x2020c2f6 URL:/main.rbx?page=1>
-    #    
+    #
     def route_to(oth)
       case oth
       when Generic
@@ -962,7 +962,7 @@ module URI
 
     #
     # Returns normalized URI
-    # 
+    #
     def normalize
       uri = dup
       uri.normalize!
@@ -978,7 +978,7 @@ module URI
       end
       if host && host != host.downcase
         set_host(self.host.downcase)
-      end        
+      end
     end
 
     def path_query
@@ -992,7 +992,7 @@ module URI
 
     #
     # Constructs String from URI
-    # 
+    #
     def to_s
       str = ''
       if @scheme
@@ -1094,7 +1094,7 @@ module URI
         if component.include?(c)
           self.send(c)
         else
-          raise ArgumentError, 
+          raise ArgumentError,
             "expected of components of #{self.class} (#{self.class.component.join(', ')})"
         end
       end

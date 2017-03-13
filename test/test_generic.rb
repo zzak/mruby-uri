@@ -16,9 +16,9 @@ class TestGeneric < MTest::Unit::TestCase
     assert_kind_of(URI::HTTP, @base_url)
 
     exp = [
-      'http', 
-      nil, 'a', URI::HTTP.default_port, 
-      '/b/c/d;p', 
+      'http',
+      nil, 'a', URI::HTTP.default_port,
+      '/b/c/d;p',
       'q',
       nil
     ]
@@ -30,8 +30,8 @@ class TestGeneric < MTest::Unit::TestCase
     #assert_kind_of(URI::FTP, url)
 
     #exp = [
-    #  'ftp', 
-    #  nil, 'ftp.is.co.za', URI::FTP.default_port, 
+    #  'ftp',
+    #  nil, 'ftp.is.co.za', URI::FTP.default_port,
     #  'rfc/rfc1808.txt', nil,
     #]
     #ary = uri_to_ary(url)
@@ -41,8 +41,8 @@ class TestGeneric < MTest::Unit::TestCase
     #assert_kind_of(URI::FTP, url)
 
     #exp = [
-    #  'ftp', 
-    #  nil, 'ftp.is.co.za', URI::FTP.default_port, 
+    #  'ftp',
+    #  nil, 'ftp.is.co.za', URI::FTP.default_port,
     #  '/rfc/rfc1808.txt', nil,
     #]
     #ary = uri_to_ary(url)
@@ -53,7 +53,7 @@ class TestGeneric < MTest::Unit::TestCase
     assert_kind_of(URI::Generic, url)
 
     exp = [
-      'gopher', 
+      'gopher',
       nil, 'spinaltap.micro.umn.edu', nil, nil,
       '/00/Weather/California/Los%20Angeles', nil,
       nil,
@@ -67,9 +67,9 @@ class TestGeneric < MTest::Unit::TestCase
     assert_kind_of(URI::HTTP, url)
 
     exp = [
-      'http', 
-      nil, 'www.math.uio.no', URI::HTTP.default_port, 
-      '/faq/compression-faq/part1.html', 
+      'http',
+      nil, 'www.math.uio.no', URI::HTTP.default_port,
+      '/faq/compression-faq/part1.html',
       nil,
       nil
     ]
@@ -81,7 +81,7 @@ class TestGeneric < MTest::Unit::TestCase
     #assert_kind_of(URI::Generic, url)
 
     #exp = [
-    #  'mailto', 
+    #  'mailto',
     #  'mduerst@ifi.unizh.ch',
     #  []
     #]
@@ -93,8 +93,8 @@ class TestGeneric < MTest::Unit::TestCase
     assert_kind_of(URI::Generic, url)
 
     exp = [
-      'news', 
-      nil, nil, nil, nil, 
+      'news',
+      nil, nil, nil, nil,
       nil, 'comp.infosystems.www.servers.unix',
       nil,
       nil
@@ -107,8 +107,8 @@ class TestGeneric < MTest::Unit::TestCase
     assert_kind_of(URI::Generic, url)
 
     exp = [
-      'telnet', 
-      nil, 'melvyl.ucop.edu', nil, nil, 
+      'telnet',
+      nil, 'melvyl.ucop.edu', nil, nil,
       '/', nil,
       nil,
       nil
