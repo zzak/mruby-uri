@@ -656,9 +656,13 @@ module URI
   # See URI.encode_www_component(str)
   def self.encode_www_form(enum)
     enum.map do |k, v|
-      str = encode_www_component(k)
-      str << '='
-      str << encode_www_component(v)
+      if v.nil?
+        encode_www_component(k)
+      else
+        str = encode_www_component(k)
+        str << '='
+        str << encode_www_component(v)
+      end
     end.join("&")
   end
 

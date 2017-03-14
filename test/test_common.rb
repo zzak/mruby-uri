@@ -69,6 +69,16 @@ class TestCommon < MTest::Unit::TestCase
     assert_equal(expected, URI.encode_www_form(a: 1, :'あ' => '漢'))
     assert_equal(expected, URI.encode_www_form([["a", "1"], ['あ', '漢']]))
     assert_equal(expected, URI.encode_www_form([[:a, 1], [:'あ', '漢']]))
+
+    assert_equal('&', URI.encode_www_form([['', nil], ['', nil]]))
+    assert_equal('&=', URI.encode_www_form([['', nil], ['', '']]))
+    assert_equal('=&', URI.encode_www_form([['', ''], ['', nil]]))
+    assert_equal('=&=', URI.encode_www_form([['', ''], ['', '']]))
+    assert_equal('', URI.encode_www_form([['', nil]]))
+    assert_equal('', URI.encode_www_form([]))
+    assert_equal('=', URI.encode_www_form([['', '']]))
+    assert_equal('a%26b=1&c=2%3B3&e=4', URI.encode_www_form([['a&b', '1'], ['c', '2;3'], ['e', '4']]))
+    assert_equal('image&title&price', URI.encode_www_form([['image', nil], ['title', nil], ['price', nil]]))
   end
 
   def test_decode_www_form
