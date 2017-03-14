@@ -626,14 +626,7 @@ module URI
   #
   # See URI.decode_www_component(str), URI.encode_www_form(enum)
   def self.encode_www_component(str)
-    str.gsub(/[^*\-.0-9A-Z_a-z]/){
-      key = $&
-      if TBLENCWWWCOMP_[key]
-        TBLENCWWWCOMP_[key]
-      else
-        key.unpack("C*").collect{|i| "%%%02X" % i }.join("")
-      end
-    }
+    str.gsub(/[^*\-.0-9A-Z_a-z]/n) { TBLENCWWWCOMP_[$&] }
   end
 
   # Decode given +str+ of URL-encoded form data.
