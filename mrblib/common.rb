@@ -626,7 +626,7 @@ module URI
   #
   # See URI.decode_www_component(str), URI.encode_www_form(enum)
   def self.encode_www_component(str)
-    str.gsub(/[^*\-.0-9A-Z_a-z]/n) { TBLENCWWWCOMP_[$&] }
+    str.to_s.gsub(/[^*\-.0-9A-Z_a-z]/n) { TBLENCWWWCOMP_[$&] }
   end
 
   # Decode given +str+ of URL-encoded form data.
@@ -655,21 +655,11 @@ module URI
   #
   # See URI.encode_www_component(str)
   def self.encode_www_form(enum)
-    str = nil
-    if enum.kind_of?(Array) && enum[0].kind_of?(Array)
-      enum = enum.to_h
-    end
-    enum.each do |k,v|
-      if str
-        str << '&'
-      else
-        str = ''
-      end
-      str << encode_www_component(k.to_s)
+    enum.map do |k, v|
+      str = encode_www_component(k)
       str << '='
-      str << encode_www_component(v.to_s)
-    end
-    str
+      str << encode_www_component(v)
+    end.join("&")
   end
 
   def self.decode_www_form(str, opts = {})
