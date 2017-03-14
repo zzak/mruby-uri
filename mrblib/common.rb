@@ -658,6 +658,14 @@ module URI
     enum.map do |k, v|
       if v.nil?
         encode_www_component(k)
+      elsif v.respond_to?(:to_ary)
+        v.to_ary.map do |w|
+          str = encode_www_component(k)
+          unless w.nil?
+            str << '='
+            str << encode_www_component(w)
+          end
+        end.join('&')
       else
         str = encode_www_component(k)
         str << '='
