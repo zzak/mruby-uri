@@ -601,6 +601,10 @@ module URI
 
   # :nodoc:
   TBLENCWWWCOMP_ = {}
+  256.times do |i|
+    TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
+  end
+  TBLENCWWWCOMP_[' '] = '+'
 
   # :nodoc:
   TBLDECWWWCOMP_ = {}
@@ -622,17 +626,6 @@ module URI
   #
   # See URI.decode_www_component(str), URI.encode_www_form(enum)
   def self.encode_www_component(str)
-    if TBLENCWWWCOMP_.empty?
-      256.times do |i|
-        case i
-        when 0x20
-          TBLENCWWWCOMP_[' '] = '+'
-        when 0x2A, 0x2D, 0x2E, 0x30..0x39, 0x41..0x5A, 0x5F, 0x61..0x7A
-        else
-          TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
-        end
-      end
-    end
     str.gsub(/[^*\-.0-9A-Z_a-z]/){
       key = $&
       if TBLENCWWWCOMP_[key]
