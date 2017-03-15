@@ -601,6 +601,10 @@ module URI
 
   # :nodoc:
   TBLENCWWWCOMP_ = {}
+  256.times do |i|
+    TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
+  end
+  TBLENCWWWCOMP_[' '] = '+'
 
   # :nodoc:
   TBLDECWWWCOMP_ = {}
@@ -622,25 +626,7 @@ module URI
   #
   # See URI.decode_www_component(str), URI.encode_www_form(enum)
   def self.encode_www_component(str)
-    if TBLENCWWWCOMP_.empty?
-      256.times do |i|
-        case i
-        when 0x20
-          TBLENCWWWCOMP_[' '] = '+'
-        when 0x2A, 0x2D, 0x2E, 0x30..0x39, 0x41..0x5A, 0x5F, 0x61..0x7A
-        else
-          TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
-        end
-      end
-    end
-    str.gsub(/[^*\-.0-9A-Z_a-z]/){
-      key = $&
-      if TBLENCWWWCOMP_[key]
-        TBLENCWWWCOMP_[key]
-      else
-        key.unpack("C*").collect{|i| "%%%02X" % i }.join("")
-      end
-    }
+    str.to_s.gsub(/[^*\-.0-9A-Z_a-z]/n) { TBLENCWWWCOMP_[$&] }
   end
 
   # Decode given +str+ of URL-encoded form data.
@@ -669,21 +655,23 @@ module URI
   #
   # See URI.encode_www_component(str)
   def self.encode_www_form(enum)
-    str = nil
-    if enum.kind_of?(Array) && enum[0].kind_of?(Array)
-      enum = enum.to_h
-    end
-    enum.each do |k,v|
-      if str
-        str << '&'
+    enum.map do |k, v|
+      if v.nil?
+        encode_www_component(k)
+      elsif v.respond_to?(:to_ary)
+        v.to_ary.map do |w|
+          str = encode_www_component(k)
+          unless w.nil?
+            str << '='
+            str << encode_www_component(w)
+          end
+        end.join('&')
       else
-        str = ''
+        str = encode_www_component(k)
+        str << '='
+        str << encode_www_component(v)
       end
-      str << encode_www_component(k.to_s)
-      str << '='
-      str << encode_www_component(v.to_s)
-    end
-    str
+    end.join("&")
   end
 
   def self.decode_www_form(str, opts = {})
