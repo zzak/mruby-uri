@@ -44,19 +44,19 @@ class TestCommon < MTest::Unit::TestCase
     #assert_raise(NoMethodError) { Object.new.URI("http://www.ruby-lang.org/") }
   end
 
-  def test_encode_www_component
+  def test_encode_www_form_component
     assert_equal("+%21%22%23%24%25%26%27%28%29*%2B%2C-.%2F09%3A%3B%3C%3D%3E%3F%40AZ%5B%5C%5D%5E_%60az%7B%7C%7D%7E",
-                 URI.encode_www_component(" !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~"))
-    assert_equal("%00%01", URI.encode_www_component("\x00\x01"))
-    assert_equal("%AA%FF", URI.encode_www_component("\xaa\xff"))
+                 URI.encode_www_form_component(" !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~"))
+    assert_equal("%00%01", URI.encode_www_form_component("\x00\x01"))
+    assert_equal("%AA%FF", URI.encode_www_form_component("\xaa\xff"))
   end
 
-  def test_decode_www_component
+  def test_decode_www_form_component
     assert_equal(" !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~",
-                 URI.decode_www_component(
+                 URI.decode_www_form_component(
                    "+%21%22%23%24%25%26%27%28%29*%2B%2C-.%2F09%3A%3B%3C%3D%3E%3F%40AZ%5B%5C%5D%5E_%60az%7B%7C%7D%7E"))
-    assert_equal("\x00\x01", URI.decode_www_component("%00%01"))
-    assert_equal("\xaa\xff", URI.decode_www_component("%AA%FF"))
+    assert_equal("\x00\x01", URI.decode_www_form_component("%00%01"))
+    assert_equal("\xaa\xff", URI.decode_www_form_component("%AA%FF"))
   end
 
   def test_encode_www_form

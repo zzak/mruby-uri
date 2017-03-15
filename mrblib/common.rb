@@ -624,8 +624,8 @@ module URI
   #
   # This refers http://www.w3.org/TR/html5/forms.html#url-encoded-form-data
   #
-  # See URI.decode_www_component(str), URI.encode_www_form(enum)
-  def self.encode_www_component(str)
+  # See URI.decode_www_form_component(str), URI.encode_www_form(enum)
+  def self.encode_www_form_component(str)
     str.to_s.gsub(/[^*\-.0-9A-Z_a-z]/n) { TBLENCWWWCOMP_[$&] }
   end
 
@@ -633,8 +633,8 @@ module URI
   #
   # This decods + to SP.
   #
-  # See URI.encode_www_component(str)
-  def self.decode_www_component(str)
+  # See URI.encode_www_form_component(str)
+  def self.decode_www_form_component(str)
     str.gsub(/\+|%\h\h/){ TBLDECWWWCOMP_[$&] }
   end
 
@@ -643,7 +643,7 @@ module URI
   # This generates application/x-www-form-urlencoded data defined in HTML5
   # from given an Enumerable object.
   #
-  # This internally uses URI.encode_www_component(str).
+  # This internally uses URI.encode_www_form_component(str).
   #
   # This doesn't convert encodings of give items, so convert them before call
   # this method if you want to send data as other than original encoding or
@@ -653,23 +653,23 @@ module URI
   #
   # This refers http://www.w3.org/TR/html5/forms.html#url-encoded-form-data
   #
-  # See URI.encode_www_component(str)
+  # See URI.encode_www_form_component(str)
   def self.encode_www_form(enum)
     enum.map do |k, v|
       if v.nil?
-        encode_www_component(k)
+        encode_www_form_component(k)
       elsif v.respond_to?(:to_ary)
         v.to_ary.map do |w|
-          str = encode_www_component(k)
+          str = encode_www_form_component(k)
           unless w.nil?
             str << '='
-            str << encode_www_component(w)
+            str << encode_www_form_component(w)
           end
         end.join('&')
       else
-        str = encode_www_component(k)
+        str = encode_www_form_component(k)
         str << '='
-        str << encode_www_component(v)
+        str << encode_www_form_component(v)
       end
     end.join("&")
   end
@@ -682,8 +682,8 @@ module URI
       key, val = string.split('=', 2)
 
       [
-        key.nil? ? "" : decode_www_component(key),
-        val.nil? ? "" : decode_www_component(val),
+        key.nil? ? "" : decode_www_form_component(key),
+        val.nil? ? "" : decode_www_form_component(val),
       ]
     end
   end
