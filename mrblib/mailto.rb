@@ -19,7 +19,7 @@ module URI
     DEFAULT_PORT = nil
 
     # An Array of the available components for URI::MailTo
-    COMPONENT = [ :scheme, :to, :headers ].freeze
+    COMPONENT = [ :scheme, :to, :headers ]
 
     # :stopdoc:
     #  "hname" and "hvalue" are encodings of an RFC 822 header name and
