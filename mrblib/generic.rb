@@ -192,7 +192,7 @@ module URI
         self.query = query
         self.set_opaque(opaque)
         self.set_registry(registry)
-        self.set_fragment(fragment)
+        self.fragment=(fragment)
       end
       if @registry && !self.class.use_registry
         raise InvalidURIError,
@@ -548,27 +548,14 @@ module URI
       v
     end
 
-    def check_fragment(v)
-      return v unless v
-
-      if v && v != '' && FRAGMENT !~ v
-        raise InvalidComponentError,
-          "bad component(expected fragment component): #{v}"
-      end
-
-      return true
-    end
-    private :check_fragment
-
-    def set_fragment(v)
-      @fragment = v
-    end
-    protected :set_fragment
-
     def fragment=(v)
-      check_fragment(v)
-      set_fragment(v)
-      v
+      return @fragment = nil unless v
+
+      x = v.to_str
+      v = x.dup if x.equal? v
+      v.gsub!(/\t|\r|\n/, '')
+      v.gsub!(/(?!%\h\h|[!-~])./n){'%%%02X' % $&.ord}
+      @fragment = v
     end
 
     #
@@ -602,7 +589,7 @@ module URI
     end
 
     def split_path(path)
-      path.split(%r{/+}, -1)
+      path.split("/", -1)
     end
     private :split_path
 
@@ -615,9 +602,6 @@ module URI
 
       # RFC2396, Section 5.2, 6), a)
       base_path << '' if base_path.last == '..'
-      bp = base_path.dup
-
-      while i = bp.index('..')
         bp = base_path.slice(i - 1, 2)
       end
       base_path = bp
@@ -757,8 +741,8 @@ module URI
       base.set_userinfo(rel.userinfo) if rel.userinfo
       base.set_host(rel.host)         if rel.host
       base.set_port(rel.port)         if rel.port
-      base.set_fragment(rel.fragment) if rel.fragment
       base.query = rel.query       if rel.query
+      base.fragment=(rel.fragment) if rel.fragment
 
       return base
     end # merge
@@ -807,8 +791,8 @@ module URI
         return dst.dup
       end
 
-      src_path = src.scan(%r{(?:\A|[^/]+)/})
-      dst_path = dst.scan(%r{(?:\A|[^/]+)/?})
+      src_path = src.scan(%r{[^/]*/})
+      dst_path = dst.scan(%r{[^/]*/?})
 
       # discard same parts
       while !dst_path.empty? && dst_path.first == src_path.first
@@ -908,7 +892,6 @@ module URI
       if oth == rel
         return rel
       end
-
       rel.set_path(route_from_path(oth.path, self.path))
       if rel.path == './' && self.query
         # "./?foo" -> "?foo"
@@ -955,8 +938,11 @@ module URI
     # Destructive version of #normalize
     #
     def normalize!
-      if path && path == ''
+      if path && path.empty?
         set_path('/')
+      end
+      if scheme && scheme != scheme.downcase
+        set_scheme(self.scheme.downcase)
       end
       if host && host != host.downcase
         set_host(self.host.downcase)
@@ -989,7 +975,7 @@ module URI
         if @registry
           str << @registry
         else
-          if @host
+          if @host || %w[file postgres].include?(@scheme)
             str << '//'
           end
           if self.userinfo
@@ -1004,15 +990,16 @@ module URI
             str << @port.to_s
           end
         end
-
-        str << path_query
+        str << @path
+        if @query
+          str << '?'
+          str << @query
+        end
       end
-
       if @fragment
         str << '#'
         str << @fragment
       end
-
       str
     end
 
