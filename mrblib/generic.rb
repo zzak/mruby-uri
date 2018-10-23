@@ -1068,7 +1068,7 @@ module URI
 =end
     def component_ary
       component.collect do |x|
-        self.send(x)
+        self.__send__(x)
       end
     end
     protected :component_ary
@@ -1093,7 +1093,7 @@ module URI
     def select(*components)
       components.collect do |c|
         if component.include?(c)
-          self.send(c)
+          self.__send__(c)
         else
           raise ArgumentError,
             "expected of components of #{self.class} (#{self.class.component.join(', ')})"
