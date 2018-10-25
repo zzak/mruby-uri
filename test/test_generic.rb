@@ -8,7 +8,7 @@ class TestGeneric < MTest::Unit::TestCase
   end
 
   def uri_to_ary(uri)
-    uri.class.component.collect {|c| uri.send(c)}
+    uri.class.component.collect {|c| uri.__send__(c)}
   end
 
   def test_parse

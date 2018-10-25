@@ -7,7 +7,7 @@ class URI::TestMailTo < MTest::Unit::TestCase
   end
 
   def uri_to_ary(uri)
-    uri.class.component.collect {|c| uri.send(c)}
+    uri.class.component.collect {|c| uri.__send__(c)}
   end
 
   def test_build
@@ -149,7 +149,7 @@ class URI::TestMailTo < MTest::Unit::TestCase
   def test_to_s
     u = URI::MailTo.build([nil, 'subject=Ruby'])
 
-    u.send(:set_to, nil)
+    u.__send__(:set_to, nil)
     assert_equal('mailto:?subject=Ruby', u.to_s)
 
     u.fragment = 'test'
