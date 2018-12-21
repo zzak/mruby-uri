@@ -658,8 +658,8 @@ module URI
     enum.map do |k, v|
       if v.nil?
         encode_www_form_component(k)
-      elsif v.respond_to?(:to_ary)
-        v.to_ary.map do |w|
+      elsif v.respond_to?(:to_a)
+        v.to_a.map do |w|
           str = encode_www_form_component(k)
           unless w.nil?
             str << '='
