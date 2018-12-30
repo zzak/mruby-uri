@@ -529,7 +529,7 @@ module URI
     def convert_to_uri(uri)
       if uri.is_a?(URI::Generic)
         uri
-      elsif uri = String.try_convert(uri)
+      elsif String === uri
         parse(uri)
       else
         raise ArgumentError,
