@@ -1,4 +1,4 @@
-class TestGeneric < MTest::Unit::TestCase
+class URI::TestGeneric < MTest::Unit::TestCase
   def setup
     @url = 'http://a/b/c/d;p?q'
     @base_url = URI.parse(@url)
@@ -9,6 +9,16 @@ class TestGeneric < MTest::Unit::TestCase
 
   def uri_to_ary(uri)
     uri.class.component.collect {|c| uri.__send__(c)}
+  end
+
+  def test_to_s
+    exp = 'http://example.com/'.freeze
+    str = URI(exp).to_s
+    assert_equal exp, str
+
+    assert_equal "file:///foo", URI("file:///foo").to_s
+    assert_equal "postgres:///foo", URI("postgres:///foo").to_s
+    assert_equal "http:/foo", URI("http:///foo").to_s
   end
 
   def test_parse
@@ -26,27 +36,27 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal(exp, ary)
 
     # 1
-    #url = URI.parse('ftp://ftp.is.co.za/rfc/rfc1808.txt')
-    #assert_kind_of(URI::FTP, url)
-
-    #exp = [
-    #  'ftp',
-    #  nil, 'ftp.is.co.za', URI::FTP.default_port,
-    #  'rfc/rfc1808.txt', nil,
-    #]
-    #ary = uri_to_ary(url)
-    #assert_equal(exp, ary)
-    ## 1'
-    #url = URI.parse('ftp://ftp.is.co.za/%2Frfc/rfc1808.txt')
-    #assert_kind_of(URI::FTP, url)
-
-    #exp = [
-    #  'ftp',
-    #  nil, 'ftp.is.co.za', URI::FTP.default_port,
-    #  '/rfc/rfc1808.txt', nil,
-    #]
-    #ary = uri_to_ary(url)
-    #assert_equal(exp, ary)
+    # url = URI.parse('ftp://ftp.is.co.za/rfc/rfc1808.txt')
+    # assert_kind_of(URI::FTP, url)
+    #
+    # exp = [
+    #   'ftp',
+    #   nil, 'ftp.is.co.za', URI::FTP.default_port,
+    #   'rfc/rfc1808.txt', nil,
+    # ]
+    # ary = uri_to_ary(url)
+    # assert_equal(exp, ary)
+    # 1'
+    # url = URI.parse('ftp://ftp.is.co.za/%2Frfc/rfc1808.txt')
+    # assert_kind_of(URI::FTP, url)
+    #
+    # exp = [
+    #   'ftp',
+    #   nil, 'ftp.is.co.za', URI::FTP.default_port,
+    #   '/rfc/rfc1808.txt', nil,
+    # ]
+    # ary = uri_to_ary(url)
+    # assert_equal(exp, ary)
 
     # 2
     url = URI.parse('gopher://spinaltap.micro.umn.edu/00/Weather/California/Los%20Angeles')
@@ -77,16 +87,16 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal(exp, ary)
 
     # 4
-    #url = URI.parse('mailto:mduerst@ifi.unizh.ch')
-    #assert_kind_of(URI::Generic, url)
+    url = URI.parse('mailto:mduerst@ifi.unizh.ch')
+    assert_kind_of(URI::Generic, url)
 
-    #exp = [
-    #  'mailto',
-    #  'mduerst@ifi.unizh.ch',
-    #  []
-    #]
-    #ary = uri_to_ary(url)
-    #assert_equal(exp, ary)
+    exp = [
+      'mailto',
+      'mduerst@ifi.unizh.ch',
+      []
+    ]
+    ary = uri_to_ary(url)
+    assert_equal(exp, ary)
 
     # 5
     url = URI.parse('news:comp.infosystems.www.servers.unix')
@@ -118,14 +128,14 @@ class TestGeneric < MTest::Unit::TestCase
 
     # 7
     # reported by Mr. Kubota <em6t-kbt@asahi-net.or.jp>
-    assert_raise(URI::InvalidURIError) { URI.parse('http://a_b:80/') }
-    assert_raise(URI::InvalidURIError) { URI.parse('http://a_b/') }
+    assert_nothing_raised(URI::InvalidURIError) { URI.parse('http://a_b:80/') }
+    assert_nothing_raised(URI::InvalidURIError) { URI.parse('http://a_b/') }
 
     # 8
     # reported by m_seki
-    uri = URI.parse('file:///foo/bar.txt')
+    url = URI.parse('file:///foo/bar.txt')
     assert_kind_of(URI::Generic, url)
-    uri = URI.parse('file:/foo/bar.txt')
+    url = URI.parse('file:/foo/bar.txt')
     assert_kind_of(URI::Generic, url)
 
     # 9
@@ -149,15 +159,31 @@ class TestGeneric < MTest::Unit::TestCase
     u3 = URI.parse('http://foo/bar')
     u4 = URI.parse('http://foo/bar/')
 
-    assert_equal(URI.parse('http://foo/baz'), u1 + 'baz')
-    assert_equal(URI.parse('http://foo/baz'), u2 + 'baz')
-    assert_equal(URI.parse('http://foo/baz'), u3 + 'baz')
-    assert_equal(URI.parse('http://foo/bar/baz'), u4 + 'baz')
-
-    assert_equal(URI.parse('http://foo/baz'), u1 + '/baz')
-    assert_equal(URI.parse('http://foo/baz'), u2 + '/baz')
-    assert_equal(URI.parse('http://foo/baz'), u3 + '/baz')
-    assert_equal(URI.parse('http://foo/baz'), u4 + '/baz')
+    {
+      u1 => {
+        'baz'  => 'http://foo/baz',
+        '/baz' => 'http://foo/baz',
+      },
+      u2 => {
+        'baz'  => 'http://foo/baz',
+        '/baz' => 'http://foo/baz',
+      },
+      u3 => {
+        'baz'  => 'http://foo/baz',
+        '/baz' => 'http://foo/baz',
+      },
+      u4 => {
+        'baz'  => 'http://foo/bar/baz',
+        '/baz' => 'http://foo/baz',
+      },
+    }.each { |base, map|
+      map.each { |url, result|
+        expected = URI.parse(result)
+        uri = URI.parse(url)
+        assert_equal expected, base + url, "<#{base}> + #{url.inspect} to become <#{expected}>"
+        assert_equal expected, base + uri, "<#{base}> + <#{uri}> to become <#{expected}>"
+      }
+    }
 
     url = URI.parse('http://hoge/a.html') + 'b.html'
     assert_equal('http://hoge/b.html', url.to_s, "[ruby-dev:11508]")
@@ -177,6 +203,9 @@ class TestGeneric < MTest::Unit::TestCase
     assert(nil != u.merge!("../baz"))
     assert_equal('http://foo/baz', u.to_s)
 
+    url = URI.parse('http://a/b//c') + 'd//e'
+    assert_equal('http://a/b//d//e', url.to_s)
+
     u0 = URI.parse('mailto:foo@example.com')
     u1 = URI.parse('mailto:foo@example.com#bar')
     assert_equal(uri_to_ary(u0 + '#bar'), uri_to_ary(u1), "[ruby-dev:23628]")
@@ -184,19 +213,18 @@ class TestGeneric < MTest::Unit::TestCase
     u0 = URI.parse('http://www.example.com/')
     u1 = URI.parse('http://www.example.com/foo/..') + './'
     assert_equal(u0, u1, "[ruby-list:39838]")
-    #u0 = URI.parse('http://www.example.com/foo/')
-    #u1 = URI.parse('http://www.example.com/foo/bar/..') + './'
-    #puts [u0, u1]
-    #assert_equal(u0, u1)
-    #u0 = URI.parse('http://www.example.com/foo/bar/')
-    #u1 = URI.parse('http://www.example.com/foo/bar/baz/..') + './'
-    #assert_equal(u0, u1)
+    u0 = URI.parse('http://www.example.com/foo/')
+    u1 = URI.parse('http://www.example.com/foo/bar/..') + './'
+    assert_equal(u0, u1)
+    u0 = URI.parse('http://www.example.com/foo/bar/')
+    u1 = URI.parse('http://www.example.com/foo/bar/baz/..') + './'
+    assert_equal(u0, u1)
     u0 = URI.parse('http://www.example.com/')
     u1 = URI.parse('http://www.example.com/foo/bar/../..') + './'
     assert_equal(u0, u1)
-    #u0 = URI.parse('http://www.example.com/foo/')
-    #u1 = URI.parse('http://www.example.com/foo/bar/baz/../..') + './'
-    #assert_equal(u0, u1)
+    u0 = URI.parse('http://www.example.com/foo/')
+    u1 = URI.parse('http://www.example.com/foo/bar/baz/../..') + './'
+    assert_equal(u0, u1)
 
     u = URI.parse('http://www.example.com/')
     u0 = u + './foo/'
@@ -234,6 +262,9 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal('../b', url.to_s)
     url = URI.parse('http://hoge/b').route_to('http://hoge/b:c')
     assert_equal('./b:c', url.to_s)
+
+    url = URI.parse('http://hoge/b//c').route_to('http://hoge/b/c')
+    assert_equal('../c', url.to_s)
 
     url = URI.parse('file:///a/b/').route_to('file:///a/b/')
     assert_equal('', url.to_s)
@@ -679,6 +710,14 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal('http://foo:bar@baz', uri.to_s)
     assert_equal('zab', uri.host = 'zab')
     assert_equal('http://foo:bar@zab', uri.to_s)
+    uri.port = ""
+    assert_nil(uri.port)
+    uri.port = "80"
+    assert_equal(80, uri.port)
+    uri.port = "080"
+    assert_equal(80, uri.port)
+    uri.port = " 080 "
+    assert_equal(80, uri.port)
     assert_equal(8080, uri.port = 8080)
     assert_equal('http://foo:bar@zab:8080', uri.to_s)
     assert_equal('/', uri.path = '/')
@@ -687,11 +726,16 @@ class TestGeneric < MTest::Unit::TestCase
     assert_equal('http://foo:bar@zab:8080/?a=1', uri.to_s)
     assert_equal('b123', uri.fragment = 'b123')
     assert_equal('http://foo:bar@zab:8080/?a=1#b123', uri.to_s)
+    assert_equal('a[]=1', uri.query = 'a[]=1')
+    assert_equal('http://foo:bar@zab:8080/?a[]=1#b123', uri.to_s)
+    uri = URI.parse('http://foo:bar@zab:8080/?a[]=1#b123')
+    assert_equal('http://foo:bar@zab:8080/?a[]=1#b123', uri.to_s)
 
     uri = URI.parse('http://example.com')
     assert_raise(URI::InvalidURIError) { uri.password = 'bar' }
+    assert_equal("foo\nbar", uri.query = "foo\nbar")
     uri.userinfo = 'foo:bar'
-    assert_equal('http://foo:bar@example.com', uri.to_s)
+    assert_equal('http://foo:bar@example.com?foobar', uri.to_s)
     assert_raise(URI::InvalidURIError) { uri.registry = 'bar' }
     assert_raise(URI::InvalidURIError) { uri.opaque = 'bar' }
 
@@ -703,6 +747,11 @@ class TestGeneric < MTest::Unit::TestCase
     assert_raise(URI::InvalidURIError) { uri.port = 'bar' }
     assert_raise(URI::InvalidURIError) { uri.path = 'bar' }
     assert_raise(URI::InvalidURIError) { uri.query = 'bar' }
+
+    uri = URI.parse('foo:bar')
+    assert_raise(URI::InvalidComponentError) { uri.opaque = '/baz' }
+    uri.opaque = 'xyzzy'
+    assert_equal('foo:xyzzy', uri.to_s)
   end
 end
 
