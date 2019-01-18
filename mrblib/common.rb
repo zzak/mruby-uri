@@ -91,7 +91,7 @@ module URI
     #
     def escape(str, unsafe = UNSAFE)
       # URI.escape is obsolete"
-      DEFAULT_PARSER.escape(*arg)
+      DEFAULT_PARSER.escape(str, unsafe)
     end
     alias encode escape
     #
@@ -117,7 +117,7 @@ module URI
     #
     def unescape(str)
       # URI.unescape is obsolete
-      DEFAULT_PARSER.unescape(*arg)
+      DEFAULT_PARSER.unescape(str)
     end
     alias decode unescape
   end
