@@ -103,6 +103,10 @@ class TestCommon < MTest::Unit::TestCase
 
   def test_unescape
     assert_equal("http://example.com/?a=\t\r", URI.unescape("http://example.com/?a=%09%0D"))
+    assert_equal("\xe3\x83\x90", URI.unescape("\xe3\x83\x90"))
+    assert_equal("\xe3\x83\x90", URI.unescape('%e3%83%90'))
+    assert_equal("\u3042", URI.unescape('%e3%81%82'))
+    assert_equal("\xe3\x83\x90\xe3\x83\x90", URI.unescape("\xe3\x83\x90%e3%83%90"))
   end
 end
 

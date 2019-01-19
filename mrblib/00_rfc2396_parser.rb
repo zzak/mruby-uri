@@ -327,7 +327,7 @@ module URI
     # Removes escapes from +str+
     #
     def unescape(str, escaped = @regexp[:ESCAPED])
-      str.gsub(escaped) { [$&[1, 2].hex].pack('C') }
+      str.gsub(escaped) { $&[1, 2].hex.chr }
     end
 
     def inspect
