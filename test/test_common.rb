@@ -95,6 +95,15 @@ class TestCommon < MTest::Unit::TestCase
     assert_equal([%w[a 1], %w[b %]], URI.decode_www_form("a=1&b=%"))
     assert_equal([['a', ''], ['b', '']], URI.decode_www_form("a&b"))
   end
+
+  def test_escape
+    assert_equal("http://example.com/?a=%09%0D", URI.escape("http://example.com/?a=\11\15"))
+    assert_equal("@%3F@%21", URI.escape("@?@!", "!?"))
+  end
+
+  def test_unescape
+    assert_equal("http://example.com/?a=\t\r", URI.unescape("http://example.com/?a=%09%0D"))
+  end
 end
 
 MTest::Unit.new.run

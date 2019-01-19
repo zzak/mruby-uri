@@ -298,7 +298,7 @@ module URI
     def escape(str, unsafe = @regexp[:UNSAFE])
       unless unsafe.kind_of?(Regexp)
         # perhaps unsafe is String object
-        unsafe = Regexp.new("[#{Regexp.quote(unsafe)}]", false)
+        unsafe = Regexp.new("[#{Regexp.quote(unsafe)}]", nil)
       end
       str.gsub(unsafe) do
         us = $&
@@ -307,7 +307,7 @@ module URI
           tmp << sprintf('%%%02X', uc)
         end
         tmp
-      end.force_encoding(Encoding::US_ASCII)
+      end
     end
 
     #
@@ -327,7 +327,7 @@ module URI
     # Removes escapes from +str+
     #
     def unescape(str, escaped = @regexp[:ESCAPED])
-      str.gsub(escaped) { [$&[1, 2].hex].pack('C') }.force_encoding(str.encoding)
+      str.gsub(escaped) { [$&[1, 2].hex].pack('C') }
     end
 
     def inspect
